@@ -1,3 +1,4 @@
+// Entry point for the express server
 import express from "express";
 import routes from "./routes";
 
