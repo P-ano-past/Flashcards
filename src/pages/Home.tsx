@@ -1,3 +1,10 @@
+import Container from "@mui/material/Container";
+
 export default function Home() {
-  return <div className="text-4xl">Home</div>;
+  return (
+    <div>
+      <div className="text-9xl">Home</div>
+      <Container>Container</Container>
+    </div>
+  );
 }
