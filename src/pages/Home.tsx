@@ -1,10 +1,10 @@
-import Container from "@mui/material/Container";
+import Header from "../components/Header";
 
 export default function Home() {
   return (
     <div>
-      <div className="text-9xl">Home</div>
-      <Container>Container</Container>
+      <Header />
+      <div className="text-2xl">Home</div>
     </div>
   );
 }
