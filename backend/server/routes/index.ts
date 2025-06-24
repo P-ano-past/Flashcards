@@ -4,10 +4,10 @@ import apiRouter from "./api";
 
 const router = Router();
 
-router.use("/api", apiRouter);
+router.use("/", apiRouter);
 
 router.get("/", (_req, res) => {
-  res.send("API router working"); // GET /api
+  res.send("route for: /routes index.ts triggered"); // GET /api
 });
 
 export default router;

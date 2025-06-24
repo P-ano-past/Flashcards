@@ -1,10 +1,13 @@
 import Header from "../components/Header";
+import QueryForm from "../components/QueryForm";
 
 export default function Home() {
   return (
     <div>
       <Header />
-      <div className="text-2xl">Home</div>
+      <div>
+        <QueryForm />
+      </div>
     </div>
   );
 }
