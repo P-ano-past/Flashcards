@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Container } from "@mui/material";
 import QueryRoutes from "../Utils/QueryRoutes";
+import { useAlert } from "../Context/AlertContext";
 
 interface FormValues {
   query: string;
@@ -11,6 +12,7 @@ const initialFormValues: FormValues = {
 };
 
 const QueryForm: React.FC = () => {
+  const setToast = useAlert();
   const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,15 +31,23 @@ const QueryForm: React.FC = () => {
 
     const sendQuery = async () => {
       try {
-        await QueryRoutes.sendQuery(formValues);
-        console.log("Submitted query:", formValues.query);
+        const sendQuery = await QueryRoutes.sendQuery(formValues);
+        console.log("sendQuery:", sendQuery);
+        setToast({
+          success: true,
+          message: "Query submitted successfully!",
+          show: true,
+        });
         setFormValues(initialFormValues);
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unexpected error occurred.");
-        }
+        const errorMessage =
+          err instanceof Error ? err.message : "An unexpected error occurred.";
+
+        setToast({
+          success: false,
+          message: errorMessage,
+          show: true,
+        });
       }
     };
 

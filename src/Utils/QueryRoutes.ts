@@ -8,8 +8,10 @@ const QueryRoutes = {
         "/api/query/sendQuery/query",
         data
       );
+      console.log(`response`, response);
       return response.data;
     } catch (error) {
+      console.log(`error`, error);
       if (axios.isAxiosError(error)) {
         throw new Error(
           error.response?.data?.error ||
