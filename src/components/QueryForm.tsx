@@ -1,19 +1,18 @@
 import React, { useState } from "react";
+import type { QueryFormProps } from "../Utils/types/api";
 import { Box, Button, TextField, Container } from "@mui/material";
 import QueryRoutes from "../Utils/QueryRoutes";
 import { useAlert } from "../Context/AlertContext";
 
-interface FormValues {
-  query: string;
-}
-
-const initialFormValues: FormValues = {
-  query: "",
-};
-
-const QueryForm: React.FC = () => {
+const QueryForm: React.FC<QueryFormProps> = ({
+  formValues,
+  flashcards,
+  setFormValues,
+  setFlashcards,
+  initialFormValues,
+}) => {
   const setToast = useAlert();
-  const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
+
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +37,7 @@ const QueryForm: React.FC = () => {
           message: "Query submitted successfully!",
           show: true,
         });
+        setFlashcards(sendQuery.flashcards);
         setFormValues(initialFormValues);
       } catch (err) {
         const errorMessage =
@@ -73,6 +73,14 @@ const QueryForm: React.FC = () => {
         />
         <Button type="submit" variant="contained">
           Submit
+        </Button>
+        <Button
+          onClick={() => {
+            console.log(`flashcards`, flashcards);
+          }}
+          variant="contained"
+        >
+          testing state
         </Button>
       </Box>
     </Container>
