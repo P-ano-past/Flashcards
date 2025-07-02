@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
+import dotenv from "dotenv";
+dotenv.config();
 import { GoogleGenAI } from "@google/genai";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 import { gemAIResponse } from "../controllers/gemAI";
-import dotenv from "dotenv";
-dotenv.config();
 
 const sendQuery = async (req: Request, res: Response) => {
   const USE_MOCK = true;
   console.log(`req.body.query`, req.body.query);
+  console.log(`process.env.GEMINI_API_KEY`, process.env.GEMINI_API_KEY);
   if (req.body.query === "trigger-error") {
     return res.status(400).json({ error: "Query is required" });
   }

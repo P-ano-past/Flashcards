@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import QueryForm from "../components/QueryForm";
-import FlashcardContainer from "../components/FlashcardComponents/FlascardContainer";
+import FlashcardContainer from "../components/FlashcardComponents/FlashcardContainer";
 import { initialFormValues } from "../Utils/types/api";
 import type { Flashcard, FormValues } from "../Utils/types/api";
 

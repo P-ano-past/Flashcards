@@ -19,6 +19,7 @@ module.exports = {
         "toast-in": "toast-in 0.5s ease-in-out forwards",
         "toast-out": "toast-out 0.5s ease-in-out forwards",
       },
+      transform: ["hover", "group-hover"],
     },
   },
   plugins: [],
