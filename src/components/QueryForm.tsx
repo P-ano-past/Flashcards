@@ -10,6 +10,8 @@ const QueryForm: React.FC<QueryFormProps> = ({
   setFormValues,
   setFlashcards,
   initialFormValues,
+  isLoading,
+  setIsLoading,
 }) => {
   const setToast = useAlert();
 
@@ -29,6 +31,8 @@ const QueryForm: React.FC<QueryFormProps> = ({
     }
 
     const sendQuery = async () => {
+      setIsLoading(true);
+
       try {
         const sendQuery = await QueryRoutes.sendQuery(formValues);
         console.log("sendQuery:", sendQuery);
@@ -48,6 +52,8 @@ const QueryForm: React.FC<QueryFormProps> = ({
           message: errorMessage,
           show: true,
         });
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -71,8 +77,17 @@ const QueryForm: React.FC<QueryFormProps> = ({
           error={!!error}
           helperText={error}
         />
-        <Button type="submit" variant="contained">
-          Submit
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className={`px-4 py-2 rounded ${
+            isLoading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+          } text-white`}
+          variant="contained"
+        >
+          {isLoading ? "Thinking..." : "Submit"}
         </Button>
         <Button
           onClick={() => {

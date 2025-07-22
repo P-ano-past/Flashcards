@@ -27,4 +27,6 @@ export interface QueryFormProps {
   flashcards: Flashcard[] | null;
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcard[] | null>>;
   initialFormValues: FormValues;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
