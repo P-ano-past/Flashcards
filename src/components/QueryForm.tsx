@@ -3,6 +3,8 @@ import type { QueryFormProps } from "../Utils/types/api";
 import { Box, Button, TextField, Container } from "@mui/material";
 import QueryRoutes from "../Utils/QueryRoutes";
 import { useAlert } from "../Context/AlertContext";
+import { SubmitButton } from "./Buttons/SubmitButton";
+import { Spinner } from "./Loading/Spinner";
 
 const QueryForm: React.FC<QueryFormProps> = ({
   formValues,
@@ -77,18 +79,21 @@ const QueryForm: React.FC<QueryFormProps> = ({
           error={!!error}
           helperText={error}
         />
-        <Button
+        <SubmitButton
           type="submit"
           disabled={isLoading}
-          className={`px-4 py-2 rounded ${
-            isLoading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600"
-          } text-white`}
-          variant="contained"
+          whileTap={{ scale: 0.95 }}
         >
-          {isLoading ? "Thinking..." : "Submit"}
-        </Button>
+          {isLoading ? (
+            <>
+              <Spinner />
+              Thinking...
+            </>
+          ) : (
+            "Submit"
+          )}
+        </SubmitButton>
+
         <Button
           onClick={() => {
             console.log(`flashcards`, flashcards);
