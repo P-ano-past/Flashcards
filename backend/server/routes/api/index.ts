@@ -2,11 +2,13 @@
 import { Router } from "express";
 import usersRouter from "./UserRoutes";
 import queryRouter from "./QueryRoutes";
+import checkoutRouter from "./checkoutRoutes";
 
 const router = Router();
 
 router.use("/users", usersRouter);
 router.use("/query", queryRouter);
+router.use("/checkout", checkoutRouter);
 
 router.get("/", (_req, res) => {
   res.send("Route in route/api index.js triggered"); // GET /api

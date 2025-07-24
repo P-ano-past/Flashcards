@@ -2,15 +2,26 @@ export interface QueryData {
   query: string;
 }
 
-export interface Flashcard {
-  question: string;
-  answer: string;
-}
-
 export interface QueryResponse {
   flashcards: Flashcard[] | null;
   success: boolean;
   error?: string;
+}
+
+export interface PaymentData {
+  amount: number;
+  currency: string;
+  description?: string;
+}
+
+export interface PaymentResponse {
+  url: string;
+  error?: string;
+}
+
+export interface Flashcard {
+  question: string;
+  answer: string;
 }
 
 export interface FormValues {
