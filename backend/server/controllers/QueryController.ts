@@ -1,16 +1,17 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import { GoogleGenAI } from "@google/genai";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 import { gemAIResponse } from "../controllers/gemAI";
 
-const sendQuery = async (req: Request, res: Response) => {
+export const sendQuery: RequestHandler = async (req, res) => {
   const USE_MOCK = true;
   console.log(`req.body.query`, req.body.query);
   console.log(`process.env.GEMINI_API_KEY`, process.env.GEMINI_API_KEY);
   if (req.body.query === "trigger-error") {
-    return res.status(400).json({ error: "Query is required" });
+    res.status(400).json({ error: "Query is required" });
+    return;
   }
 
   try {
@@ -56,16 +57,15 @@ Only return the flashcards. No extra explanations, no numbering, no titles.`,
     res.status(200).json({
       success: true,
       message: "Flashcards generated successfully",
-      flashcards: flashcards,
+      flashcards,
     });
-    return;
   } catch (error) {
     console.error("Failed to handle query:", error);
-    res.status(500).json({ error: "Internal server error, oops" });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
-const parseFlashcards = (
+export const parseFlashcards = (
   text: string
 ): { question: string; answer: string }[] => {
   try {
@@ -84,9 +84,4 @@ const parseFlashcards = (
     console.error("Failed to parse flashcards:", error);
     return [];
   }
-};
-
-export default {
-  sendQuery,
-  parseFlashcards,
 };

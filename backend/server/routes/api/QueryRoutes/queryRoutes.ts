@@ -1,7 +1,7 @@
 import { Router } from "express";
-import QueryController from "../../../controllers/QueryController";
+import { sendQuery } from "../../../controllers/QueryController";
 const router = Router();
 
-router.post("/query", QueryController.sendQuery);
+router.post("/query", sendQuery);
 
 export default router;

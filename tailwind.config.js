@@ -20,6 +20,14 @@ module.exports = {
         "toast-out": "toast-out 0.5s ease-in-out forwards",
       },
       transform: ["hover", "group-hover"],
+      utilities: {
+        ".backface-hidden": {
+          "backface-visibility": "hidden",
+        },
+        ".rotate-y-180": {
+          transform: "rotateY(180deg)",
+        },
+      },
     },
   },
   plugins: [],
