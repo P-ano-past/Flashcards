@@ -54,4 +54,5 @@ export interface PaymentSession {
   currency: string;
   description: string;
   email: string;
+  name: string;
 }

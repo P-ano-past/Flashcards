@@ -10,7 +10,6 @@ const DonateSuccess = () => {
   const [donationDetails, setDonationDetails] =
     useState<DonationDetails | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log(`donationDetails`, donationDetails);
   useEffect(() => {
     const fetchSession = async () => {
       try {
@@ -18,7 +17,6 @@ const DonateSuccess = () => {
         if (!res) {
           throw new Error("No session data found");
         }
-        console.log(`res`, res);
         setDonationDetails(res);
       } catch (error) {
         console.error("Failed to fetch session:", error);
@@ -35,7 +33,7 @@ const DonateSuccess = () => {
   return (
     <div className="max-w-xl mx-auto text-center p-6 rounded-lg bg-white shadow-lg mt-12">
       <h1 className="text-3xl font-bold mb-4 text-green-600">
-        Woo!🎉 Thank you {donationDetails.name}!
+        Woo!🎉 Thank you {donationDetails?.name}!
       </h1>
       <p className="text-gray-700 mb-4">
         Your donation of{" "}
