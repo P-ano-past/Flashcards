@@ -41,3 +41,17 @@ export interface QueryFormProps {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface DonationDetails {
+  amount: number;
+  email: string;
+  name: string;
+}
+
+export interface PaymentSession {
+  sessionId: string;
+  amount: number;
+  currency: string;
+  description: string;
+  email: string;
+}

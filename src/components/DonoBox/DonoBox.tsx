@@ -1,8 +1,7 @@
-// components/DonoBox.tsx
-
 import React from "react";
-import { Card, CardContent, Typography, Button } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import DonoButtons from "./DonoButtons/DonoButtons";
 
 const DonoBox = () => {
   return (
@@ -23,15 +22,7 @@ const DonoBox = () => {
           >
             Support the dev with a small donation!
           </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            href="https://ko-fi.com/yourusername" // placeholder
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Buy me a coffee
-          </Button>
+          <DonoButtons />
         </CardContent>
       </Card>
     </motion.div>
