@@ -34,7 +34,7 @@ export const stripeCheckout: RequestHandler = async (req, res) => {
       ],
       mode: "payment",
       success_url: `${process.env.CLIENT_URL}/thanks?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/cancel`,
+      cancel_url: `${process.env.CLIENT_URL}/`,
     });
 
     res.status(200).json({ url: session.url });

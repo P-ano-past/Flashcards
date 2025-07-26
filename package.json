@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "concurrently --names \"BACK,FRONT\" --prefix-colors \"cyan,magenta\" \"npm run dev --prefix backend\" \"vite\"",
     "build": "tsc -b && vite build",
+    "start": "node backend/dist/index.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
