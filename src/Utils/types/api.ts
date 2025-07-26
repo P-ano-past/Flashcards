@@ -35,11 +35,13 @@ export const initialFormValues: FormValues = {
 export interface QueryFormProps {
   formValues: FormValues;
   setFormValues: React.Dispatch<React.SetStateAction<FormValues>>;
-  flashcards: Flashcard[] | null;
   setFlashcards: React.Dispatch<React.SetStateAction<Flashcard[] | null>>;
   initialFormValues: FormValues;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+  setQueryTopic: React.Dispatch<React.SetStateAction<string>>;
+  submitted?: boolean;
 }
 
 export interface DonationDetails {

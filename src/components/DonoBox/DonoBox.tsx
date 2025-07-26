@@ -18,7 +18,7 @@ const DonoBox = () => {
           </Typography>
           <Typography
             variant="body2"
-            className="mb-4 text-gray-600 dark:text-gray-300"
+            className="mb-4 text-gray-600 dark:text-gray-800"
           >
             Support the dev with a small donation!
           </Typography>
