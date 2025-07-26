@@ -1,32 +1,33 @@
-import React from "react";
-import { Button } from "@mui/material";
+import React, { useState } from "react";
+import { CircularProgress } from "@mui/material";
 import PaymentRoutes from "../../../Utils/PaymentRoutes";
 
 const DonoButtons = () => {
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [activeAmount, setActiveAmount] = useState<number | null>(null);
+
   const donationAmounts = [
     {
       amount: 5,
       label: "☕ Buy me a coffee ($5)",
-      currency: "USD",
-      styles:
-        "bg-blue-300 hover:bg-blue-400 text-white font-semibold py-2 px-4 rounded shadow",
+      styles: "bg-blue-400 hover:bg-blue-500",
     },
     {
       amount: 10,
       label: "💙 Support the dev ($10)",
-      currency: "USD",
-      styles:
-        "bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow",
+      styles: "bg-blue-600 hover:bg-blue-700",
     },
     {
       amount: 20,
       label: "🚀 Sponsor a feature ($20)",
-      currency: "USD",
-      styles:
-        "bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded shadow",
+      styles: "bg-yellow-500 hover:bg-yellow-600",
     },
   ];
+
   const handleDonation = async (amount: number, label: string) => {
+    setIsRedirecting(true);
+    setActiveAmount(amount);
+
     try {
       const paymentData = {
         amount: amount * 100,
@@ -42,6 +43,8 @@ const DonoButtons = () => {
       }
     } catch (error) {
       console.error("Payment failed:", error);
+    } finally {
+      setIsRedirecting(false);
     }
   };
 
@@ -49,15 +52,17 @@ const DonoButtons = () => {
   return (
     <div className="grid gap-y-4 w-full">
       {donationAmounts.map((donation) => (
-        <Button
+        <button
           key={donation.amount}
-          variant="contained"
-          className={`w-full ${donation.styles} text-white py-8 px-4`}
-          color="primary"
+          className={`w-full text-white font-semibold rounded shadow py-4 px-4 ${donation.styles}`}
           onClick={() => handleDonation(donation.amount, donation.label)}
         >
-          {donation.label}
-        </Button>
+          {isRedirecting && activeAmount === donation.amount ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            donation.label
+          )}
+        </button>
       ))}
     </div>
   );
