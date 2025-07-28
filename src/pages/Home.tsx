@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Header from "../components/Header";
 import QueryForm from "../components/QueryForm";
 import FlashcardContainer from "../components/FlashcardComponents/FlashcardContainer";
