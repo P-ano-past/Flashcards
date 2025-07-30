@@ -5,6 +5,7 @@ import FlashcardContainer from "../components/FlashcardComponents/FlashcardConta
 import { initialFormValues } from "../Utils/types/api";
 import type { Flashcard, FormValues } from "../Utils/types/api";
 import { AnimatePresence, motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 export default function Home() {
   const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
@@ -22,6 +23,10 @@ export default function Home() {
 
   return (
     <div>
+      <Helmet>
+        <title>Home | Flashcards</title>
+        <link rel="icon" href="/favicon-home.png" />
+      </Helmet>
       <Header />
       <main className="p-6 max-w-3xl mx-auto space-y-6">
         <AnimatePresence mode="wait">

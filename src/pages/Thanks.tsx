@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import PaymentRoutes from "../Utils/PaymentRoutes";
 import type { DonationDetails } from "../Utils/types/api";
+import { Helmet } from "react-helmet-async";
 
 const DonateSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -32,6 +33,11 @@ const DonateSuccess = () => {
 
   return (
     <div className="max-w-xl mx-auto text-center p-6 rounded-lg bg-white shadow-lg mt-12">
+      <Helmet>
+        <title>Thanks for Donating!</title>
+        <link rel="icon" href="/favicon-thanks.png" />
+      </Helmet>
+      <h1>Thank You!</h1>
       <h1 className="text-3xl font-bold mb-4 text-green-600">
         Woo!🎉 Thank you {donationDetails?.name}!
       </h1>
