@@ -85,6 +85,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
             <Box
               component="form"
               onSubmit={handleSubmit}
+              className="bg-zinc-700 placeholder-white/80 border border-gray-600 focus:ring-2 focus:ring-gray-700 px-4 py-2 rounded "
               noValidate
               sx={{ mt: 4, display: "flex", gap: 2 }}
             >
@@ -96,6 +97,27 @@ const QueryForm: React.FC<QueryFormProps> = ({
                 fullWidth
                 error={!!error}
                 helperText={error}
+                sx={{
+                  input: {
+                    color: "#ffffff",
+                    "&::placeholder": {
+                      color: "rgba(255, 255, 255, 0.8)",
+                      opacity: 1,
+                    },
+                  },
+                  label: {
+                    color: "#afafaf",
+                  },
+                  fieldset: {
+                    borderColor: "#afafaf",
+                  },
+                  "& .MuiOutlinedInput-root:hover fieldset": {
+                    borderColor: "#afafaf",
+                  },
+                  "& .MuiOutlinedInput-root.Mui-focused fieldset": {
+                    borderColor: "#afafaf",
+                  },
+                }}
               />
               <SubmitButton
                 type="submit"
