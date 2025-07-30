@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import QueryForm from "../components/QueryForm";
 import FlashcardContainer from "../components/FlashcardComponents/FlashcardContainer";
 import { initialFormValues } from "../Utils/types/api";
 import type { Flashcard, FormValues } from "../Utils/types/api";
 import { AnimatePresence, motion } from "framer-motion";
-import { Helmet } from "react-helmet-async";
+import { useHead } from "../Context/HeadContext";
 
 export default function Home() {
+  const { setTitle, setMeta } = useHead();
   const [formValues, setFormValues] = useState<FormValues>(initialFormValues);
   const [flashcards, setFlashcards] = useState<Flashcard[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [queryTopic, setQueryTopic] = useState("");
+
+  useEffect(() => {
+    setTitle("Home - PrepWise");
+    setMeta("description", "Learn more about the PrepWise mission and team.");
+  }, []);
 
   const handleReset = () => {
     setSubmitted(false);
@@ -23,10 +29,6 @@ export default function Home() {
 
   return (
     <div>
-      <Helmet>
-        <title>Home | Flashcards</title>
-        <link rel="icon" href="/favicon-home.png" />
-      </Helmet>
       <Header />
       <main className="p-6 max-w-3xl mx-auto space-y-6">
         <AnimatePresence mode="wait">

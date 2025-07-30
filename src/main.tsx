@@ -3,14 +3,14 @@ import { createRoot } from "react-dom/client";
 import { AlertProvider } from "./Context/AlertContext.tsx";
 import "./index.css";
 import App from "./App.tsx";
-import { HelmetProvider } from "react-helmet-async";
+import { HeadProvider } from "./Context/HeadContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AlertProvider>
-      <HelmetProvider>
+      <HeadProvider>
         <App />
-      </HelmetProvider>
+      </HeadProvider>
     </AlertProvider>
   </StrictMode>
 );

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useHead } from "../../Context/HeadContext";
 
 const appTitle = "PrepWise";
 
@@ -10,10 +11,12 @@ const titleMap: Record<string, string> = {
 
 export default function TitleUpdater() {
   const location = useLocation();
+  const { setTitle } = useHead();
 
   useEffect(() => {
-    document.title = titleMap[location.pathname] || "MyApp";
-  }, [location.pathname]);
+    const newTitle = titleMap[location.pathname] || appTitle;
+    setTitle(newTitle);
+  }, [location.pathname, setTitle]);
 
   return null;
 }
