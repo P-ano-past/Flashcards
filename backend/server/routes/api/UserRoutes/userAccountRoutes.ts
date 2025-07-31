@@ -6,7 +6,7 @@ import {
 } from "../../../controllers/UserController";
 const router = Router();
 
-router.get("/login", loginUserAccount);
+router.post("/login", loginUserAccount);
 router.get("/logout", logoutUserAccount);
 router.get("/profile", getUserProfile);
 

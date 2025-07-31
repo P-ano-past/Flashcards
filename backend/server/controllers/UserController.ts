@@ -17,16 +17,16 @@ const callbackUrl =
     ? process.env.AUTH0_CALLBACK_URL_DEV
     : process.env.AUTH0_CALLBACK_URL;
 
-export const loginUserAccount = async (req: Request, res: Response) => {
+export const loginUserAccount = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     if (!auth0Domain || !clientId || !callbackUrl) {
-      return res
-        .status(500)
-        .json({ error: "Missing required environment variables" });
+      res.status(500).json({ error: "Missing required environment variables" });
+      return;
     }
     const auth0LoginUrl = `https://${auth0Domain}/authorize?response_type=code&client_id=${clientId}&redirect_uri=${callbackUrl}&scope=openid profile email`;
-
-    console.log("Auth0 login URL:", auth0LoginUrl);
 
     res.status(200).json({ loginUrl: auth0LoginUrl });
   } catch (error) {
