@@ -54,9 +54,11 @@ const QueryForm: React.FC<QueryFormProps> = ({
         });
         setFlashcards(sendQuery.flashcards);
         setFormValues(initialFormValues);
-      } catch (err) {
+      } catch (error) {
         const errorMessage =
-          err instanceof Error ? err.message : "An unexpected error occurred.";
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred.";
         setToast({
           success: false,
           message: errorMessage,

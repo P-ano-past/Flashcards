@@ -4,7 +4,7 @@ const UserRoutes = {
   login: async () => {
     try {
       const response = await axios.get(`api/user/account/login`);
-      return response.data;
+      return response.data.loginUrl;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         throw new Error(

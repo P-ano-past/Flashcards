@@ -8,14 +8,46 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-
+import UserRoutes from "../Utils/UserRoutes";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { useAlert } from "../Context/AlertContext";
 
 export default function Header() {
+  const setToast = useAlert();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await UserRoutes.login();
+
+      const loginUrl = response;
+
+      if (loginUrl) {
+        window.location.href = loginUrl;
+      } else {
+        throw new Error("No login URL received from the server.");
+      }
+
+      setToast({
+        success: true,
+        message: "Login successful!",
+        show: true,
+      });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred.";
+      setToast({
+        success: false,
+        message: errorMessage,
+        show: true,
+      });
+    }
   };
 
   const handleClose = () => {
@@ -56,7 +88,7 @@ export default function Header() {
             onClose={handleClose}
           >
             <MenuItem onClick={handleClose}>Profile (Coming soon!)</MenuItem>
-            <MenuItem onClick={handleClose}>Login (Coming soon!)</MenuItem>
+            <MenuItem onClick={handleLogin}>Login (Coming soon!)</MenuItem>
           </Menu>
         </Box>
       </Toolbar>

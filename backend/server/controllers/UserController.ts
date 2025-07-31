@@ -1,25 +1,32 @@
 import { Request, Response } from "express";
+import dotenv from "dotenv";
+dotenv.config({ path: ".env.development" });
+
+const auth0Domain =
+  process.env.NODE_ENV === "development"
+    ? process.env.AUTH0_DOMAIN_DEV
+    : process.env.AUTH0_DOMAIN;
+
+const clientId =
+  process.env.NODE_ENV === "development"
+    ? process.env.AUTH0_CLIENT_ID_DEV
+    : process.env.AUTH0_CLIENT_ID;
+
+const callbackUrl =
+  process.env.NODE_ENV === "development"
+    ? process.env.AUTH0_CALLBACK_URL_DEV
+    : process.env.AUTH0_CALLBACK_URL;
 
 export const loginUserAccount = async (req: Request, res: Response) => {
   try {
-    let auth0Domain, clientId, callbackUrl;
-
-    if (process.env.NODE_ENV === "development") {
-      auth0Domain = process.env.AUTH0_DOMAIN_DEV;
-      clientId = process.env.AUTH0_CLIENT_ID_DEV;
-      callbackUrl = process.env.AUTH0_CALLBACK_URL_DEV;
-    } else {
-      auth0Domain = process.env.AUTH0_DOMAIN;
-      clientId = process.env.AUTH0_CLIENT_ID;
-      callbackUrl = process.env.AUTH0_CALLBACK_URL;
-    }
-
     if (!auth0Domain || !clientId || !callbackUrl) {
       return res
         .status(500)
         .json({ error: "Missing required environment variables" });
     }
     const auth0LoginUrl = `https://${auth0Domain}/authorize?response_type=code&client_id=${clientId}&redirect_uri=${callbackUrl}&scope=openid profile email`;
+
+    console.log("Auth0 login URL:", auth0LoginUrl);
 
     res.status(200).json({ loginUrl: auth0LoginUrl });
   } catch (error) {
