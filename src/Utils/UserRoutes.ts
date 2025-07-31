@@ -3,7 +3,12 @@ import axios from "axios";
 const UserRoutes = {
   login: async () => {
     try {
-      const response = await axios.get(`api/user/account/login`);
+      const response = await axios.post(`api/user/account/login`);
+      console.log("Login response:", response);
+      if (response.data.redirectUrl) {
+        window.location.href = response.data.redirectUrl;
+      }
+
       return response.data.loginUrl;
     } catch (error) {
       if (axios.isAxiosError(error)) {

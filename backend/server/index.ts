@@ -6,6 +6,7 @@ import routes from "./routes";
 import path from "path";
 const app = express();
 const PORT = process.env.PORT || 3001;
+import cookieParser from "cookie-parser";
 
 app.use(express.json());
 app.use(
@@ -17,6 +18,7 @@ app.use(
 );
 
 app.use(passport.initialize());
+app.use(cookieParser());
 app.use(passport.session());
 
 const frontendDistPath = path.join(__dirname, "../../dist");
