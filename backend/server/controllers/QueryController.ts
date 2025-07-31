@@ -6,8 +6,6 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 import { gemAIResponse } from "../controllers/gemAI";
 
 export const sendQuery: RequestHandler = async (req, res) => {
-  const USE_MOCK = true;
-
   if (req.body.query === "trigger-error") {
     res.status(400).json({ error: "Query is required" });
     return;
@@ -21,7 +19,7 @@ export const sendQuery: RequestHandler = async (req, res) => {
 
     let flashcardsText: string = "";
 
-    if (USE_MOCK) {
+    if (process.env.NODE_ENV === "development") {
       flashcardsText = gemAIResponse.result.candidates[0].content.parts[0].text;
     } else {
       const result = await ai.models.generateContent({

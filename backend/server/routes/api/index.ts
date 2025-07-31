@@ -6,7 +6,7 @@ import checkoutRouter from "./checkoutRoutes";
 
 const router = Router();
 
-router.use("/users", usersRouter);
+router.use("/user", usersRouter);
 router.use("/query", queryRouter);
 router.use("/checkout", checkoutRouter);
 
