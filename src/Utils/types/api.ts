@@ -58,3 +58,24 @@ export interface PaymentSession {
   email: string;
   name: string;
 }
+
+export interface UserProfile {
+  sub: string;
+  name?: string;
+  email?: string;
+  picture?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AuthContextType {
+  isAuthenticated: boolean;
+  userProfile: UserProfile | null;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
+}
+
+export interface ProfileResponse {
+  token: string;
+  data: UserProfile;
+}

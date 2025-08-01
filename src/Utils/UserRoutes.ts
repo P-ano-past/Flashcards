@@ -1,10 +1,10 @@
 import axios from "axios";
+import type { ProfileResponse } from "./types/api";
 
 const UserRoutes = {
   login: async () => {
     try {
       const response = await axios.post(`api/user/account/login`);
-      console.log("Login response:", response);
       if (response.data.redirectUrl) {
         window.location.href = response.data.redirectUrl;
       }
@@ -34,9 +34,11 @@ const UserRoutes = {
       }
     }
   },
-  getProfile: async () => {
+  getProfile: async (): Promise<ProfileResponse> => {
     try {
-      const response = await axios.get(`api/user/account/profile`);
+      const response = await axios.get(`api/user/account/profile`, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -89,7 +89,7 @@ export const logoutUserAccount: RequestHandler = async (req, res) => {
 
 export const getUserProfile: RequestHandler = async (req, res) => {
   const accessToken = req.cookies.access_token;
-
+  console.log("request", req.cookies);
   if (!accessToken) {
     res.status(401).json({ error: "Unauthorized, access token missing" });
     return;
