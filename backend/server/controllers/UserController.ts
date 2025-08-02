@@ -2,6 +2,9 @@ import { RequestHandler } from "express";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.development" });
 import axios from "axios";
+import { PrismaClient } from "../../server/generated/prisma";
+
+const prisma = new PrismaClient();
 
 const auth0Domain =
   process.env.NODE_ENV === "development"
@@ -41,44 +44,79 @@ export const loginUserAccount: RequestHandler = async (req, res) => {
 
 export const handleCallback: RequestHandler = async (req, res) => {
   const { code } = req.query;
-
-  if (!code) {
-    res.status(400).json({ error: "Authorization code is missing" });
-    return;
-  }
-
   try {
-    const response = await axios.post(
+    const tokenResponse = await axios.post(
       `https://${auth0Domain}/oauth/token`,
       {
-        grant_type: "authorization_code",
-        code: code,
-        redirect_uri: callbackUrl,
         client_id: clientId,
         client_secret: clientSecret,
-      },
+        code: code,
+        redirect_uri: callbackUrl,
+        grant_type: "authorization_code",
+      }
+    );
+
+    const { access_token, refresh_token } = tokenResponse.data;
+
+    const userInfoResponse = await axios.get(
+      `https://${auth0Domain}/userinfo`,
       {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`,
         },
       }
     );
 
-    const { access_token, expires_in } = response.data;
+    const { sub, email, name, picture } = userInfoResponse.data;
 
-    res.cookie("access_token", access_token, {
+    const user = await prisma.user.upsert({
+      where: { auth0Id: sub },
+      update: {
+        name,
+        picture,
+        accessToken: access_token,
+        refreshToken: refresh_token,
+      },
+      create: {
+        auth0Id: sub,
+        email,
+        name,
+        picture,
+        accessToken: access_token,
+        refreshToken: refresh_token,
+      },
+    });
+
+    if (!user) {
+      res.status(500).json({ error: "Failed to create or update user." });
+      return;
+    }
+
+    const userData = { sub, email, name, picture };
+
+    res.cookie("user", JSON.stringify(userData), {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: expires_in * 1000,
+      maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week in milliseconds
     });
 
-    res.redirect(`${process.env.LOCAL_HOST_URL}`);
+    res.redirect("/");
+    return;
   } catch (error) {
     console.error("Error exchanging code for token:", error);
+
+    const errorMessage =
+      typeof error === "object" && error !== null && "message" in error
+        ? (error as { message: string }).message
+        : String(error);
+
     res.status(500).json({
+      success: false,
       error: "Failed to exchange authorization code for token.",
+      details: errorMessage,
     });
+    return;
   }
 };
 
@@ -89,7 +127,8 @@ export const logoutUserAccount: RequestHandler = async (req, res) => {
 
 export const getUserProfile: RequestHandler = async (req, res) => {
   const accessToken = req.cookies.access_token;
-  console.log("request", req.cookies);
+  console.log("request", req.cookies.user);
+
   if (!accessToken) {
     res.status(401).json({ error: "Unauthorized, access token missing" });
     return;

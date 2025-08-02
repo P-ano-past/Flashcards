@@ -18,6 +18,7 @@ export default function Home() {
   useEffect(() => {
     setTitle("Home - PrepWise");
     setMeta("description", "Learn more about the PrepWise mission and team.");
+    console.log("Cookies:", document.cookie);
   }, []);
 
   const handleReset = () => {
