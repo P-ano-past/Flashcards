@@ -2,8 +2,8 @@ import { RequestHandler } from "express";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.development" });
 import axios from "axios";
-// import { PrismaClient } from "../../server/generated/prisma";
-import { PrismaClient } from "@prisma/client"; // Adjust the import based on your Prisma setup
+// import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma/client";
 
 const prisma = new PrismaClient();
 
