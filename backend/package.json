@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only server/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "generate": "prisma generate",
+    "migrate:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
