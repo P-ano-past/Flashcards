@@ -88,6 +88,7 @@ export default function Header() {
             onClose={handleClose}
           >
             <MenuItem onClick={handleClose}>Profile (Coming soon!)</MenuItem>
+            {/* ternary for login  */}
             <MenuItem onClick={handleLogin}>Login (Coming soon!)</MenuItem>
           </Menu>
         </Box>
