@@ -4,13 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "prisma generate",
     "dev": "ts-node-dev --respawn --transpile-only server/index.ts",
-    "build": "tsc",
-    "generate": "prisma generate",
-    "migrate:dev": "prisma migrate dev",
-    "db:push": "prisma db push",
-    "db:seed": "prisma db seed"
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -18,13 +13,13 @@
   "type": "commonjs",
   "dependencies": {
     "@google/genai": "^1.6.0",
-    "@prisma/client": "^6.13.0",
     "axios": "^1.11.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "passport": "^0.7.0",
     "passport-auth0": "^1.4.4",
+    "pg": "^8.16.3",
     "stripe": "^18.3.0"
   },
   "devDependencies": {
