@@ -2,10 +2,6 @@ import { RequestHandler } from "express";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.development" });
 import axios from "axios";
-// import { PrismaClient } from "@prisma/client";
-import { PrismaClient } from "../generated/prisma/client";
-
-const prisma = new PrismaClient();
 
 const auth0Domain =
   process.env.NODE_ENV === "development"
@@ -70,28 +66,28 @@ export const handleCallback: RequestHandler = async (req, res) => {
 
     const { sub, email, name, picture } = userInfoResponse.data;
 
-    const user = await prisma.user.upsert({
-      where: { auth0Id: sub },
-      update: {
-        name,
-        picture,
-        accessToken: access_token,
-        refreshToken: refresh_token,
-      },
-      create: {
-        auth0Id: sub,
-        email,
-        name,
-        picture,
-        accessToken: access_token,
-        refreshToken: refresh_token,
-      },
-    });
+    // const user = await prisma.user.upsert({
+    //   where: { auth0Id: sub },
+    //   update: {
+    //     name,
+    //     picture,
+    //     accessToken: access_token,
+    //     refreshToken: refresh_token,
+    //   },
+    //   create: {
+    //     auth0Id: sub,
+    //     email,
+    //     name,
+    //     picture,
+    //     accessToken: access_token,
+    //     refreshToken: refresh_token,
+    //   },
+    // });
 
-    if (!user) {
-      res.status(500).json({ error: "Failed to create or update user." });
-      return;
-    }
+    // if (!user) {
+    //   res.status(500).json({ error: "Failed to create or update user." });
+    //   return;
+    // }
 
     const userData = { sub, email, name, picture };
 
