@@ -4,6 +4,8 @@ import session from "express-session";
 import passport from "passport";
 import routes from "./routes";
 import path from "path";
+import { pool } from "./postgres/db";
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 import cookieParser from "cookie-parser";
@@ -30,6 +32,14 @@ app.use("/api", routes);
 app.get("/*splat", (req, res) => {
   res.sendFile(path.join(frontendDistPath, "index.html"));
 });
+
+pool
+  .connect()
+  .then(() => console.log("🟢 Connected to Postgres DB"))
+  .catch((err) => {
+    console.error("🔴 DB connection error:", err);
+    process.exit(1);
+  });
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
