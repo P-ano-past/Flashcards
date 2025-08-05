@@ -21,6 +21,7 @@
     "@mui/styled-engine-sc": "^7.1.1",
     "@tailwindcss/vite": "^4.1.9",
     "axios": "^1.10.0",
+    "connect-pg-simple": "^10.0.0",
     "cookie-parser": "^1.4.7",
     "framer-motion": "^12.19.1",
     "react": "^19.1.0",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@tailwindcss/postcss": "^4.1.10",
+    "@types/connect-pg-simple": "^7.0.3",
     "@types/cookie-parser": "^1.4.9",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
