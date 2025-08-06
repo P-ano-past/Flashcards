@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { ProfileResponse } from "./types/api";
+import type { UserProfile } from "./types/api";
 
 const UserRoutes = {
   login: async () => {
@@ -23,6 +23,7 @@ const UserRoutes = {
   logout: async () => {
     try {
       const response = await axios.get(`api/user/account/logout`);
+      console.log(`response`, response);
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -34,7 +35,7 @@ const UserRoutes = {
       }
     }
   },
-  getProfile: async (): Promise<ProfileResponse> => {
+  getProfile: async (): Promise<UserProfile> => {
     try {
       const response = await axios.get(`api/user/account/profile`, {
         withCredentials: true,

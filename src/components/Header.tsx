@@ -11,11 +11,12 @@ import {
 import UserRoutes from "../Utils/UserRoutes";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useAlert } from "../Context/AlertContext";
+import { useUser } from "../Context/UserContext";
 
 export default function Header() {
   const setToast = useAlert();
+  const { user, loading } = useUser();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,6 +38,28 @@ export default function Header() {
         message: "Login successful!",
         show: true,
       });
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred.";
+      setToast({
+        success: false,
+        message: errorMessage,
+        show: true,
+      });
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await UserRoutes.logout();
+      setToast({
+        success: true,
+        message: "Logout successful!",
+        show: true,
+      });
+      window.location.reload();
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -88,8 +111,13 @@ export default function Header() {
             onClose={handleClose}
           >
             <MenuItem onClick={handleClose}>Profile (Coming soon!)</MenuItem>
-            {/* ternary for login  */}
-            <MenuItem onClick={handleLogin}>Login (Coming soon!)</MenuItem>
+            {loading ? (
+              <MenuItem disabled>Loading...</MenuItem>
+            ) : user ? (
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            ) : (
+              <MenuItem onClick={handleLogin}>Login</MenuItem>
+            )}
           </Menu>
         </Box>
       </Toolbar>

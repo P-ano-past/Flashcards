@@ -89,7 +89,7 @@ export const handleCallback: RequestHandler = async (req, res) => {
       maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week
     });
 
-    res.redirect("/");
+    res.redirect("http://localhost:5173/");
     return;
   } catch (error) {
     console.error("Error exchanging code for token or writing to DB:", error);
@@ -109,15 +109,44 @@ export const handleCallback: RequestHandler = async (req, res) => {
 };
 
 export const logoutUserAccount: RequestHandler = async (req, res) => {
-  console.log("logout user account:", req.body);
-  res.status(201).json({ message: "Account created" });
+  try {
+    // Clear your app cookies
+    res.clearCookie("user", {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+      secure: true,
+    });
+
+    const logoutUrl = `https://${auth0Domain}/v2/logout?client_id=${clientId}`;
+
+    res.status(200).json({ logoutUrl });
+  } catch (error) {
+    console.error("Error during logout process:", error);
+    res.status(500).json({ error: "Something went wrong while logging out." });
+  }
 };
 
 export const getUserProfile: RequestHandler = async (req, res) => {
-  const { auth0_id } = req.body;
+  const userCookie = req.cookies.user;
 
+  if (!userCookie) {
+    res.status(401).json({ error: "No user cookie found" });
+    return;
+  }
+
+  let parsedUser;
+  try {
+    parsedUser = JSON.parse(userCookie);
+  } catch (err) {
+    console.error("Failed to parse user cookie:", err);
+    res.status(400).json({ error: "Invalid user cookie format" });
+    return;
+  }
+
+  const { sub: auth0_id } = parsedUser;
   if (!auth0_id) {
-    res.status(400).json({ error: "Missing auth0_id" });
+    res.status(400).json({ error: "Missing auth0_id in cookie" });
     return;
   }
 
@@ -133,8 +162,10 @@ export const getUserProfile: RequestHandler = async (req, res) => {
     }
 
     res.status(200).json(result.rows[0]);
+    return;
   } catch (error) {
     console.error("Error fetching user from DB:", error);
     res.status(500).json({ error: "Failed to fetch user profile." });
+    return;
   }
 };
