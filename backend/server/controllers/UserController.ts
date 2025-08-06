@@ -24,6 +24,11 @@ const clientSecret =
     ? process.env.AUTH0_CLIENT_SECRET_DEV
     : process.env.AUTH0_CLIENT_SECRET;
 
+const clientUrl =
+  process.env.NODE_ENV === "development"
+    ? process.env.CLIENT_URL_DEV
+    : process.env.CLIENT_URL;
+
 export const loginUserAccount: RequestHandler = async (req, res) => {
   try {
     if (!auth0Domain || !clientId || !callbackUrl) {
@@ -89,7 +94,7 @@ export const handleCallback: RequestHandler = async (req, res) => {
       maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week
     });
 
-    res.redirect("http://localhost:5173/");
+    res.redirect(`${clientUrl}`);
     return;
   } catch (error) {
     console.error("Error exchanging code for token or writing to DB:", error);

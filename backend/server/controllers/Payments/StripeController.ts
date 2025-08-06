@@ -3,6 +3,11 @@ import dotenv from "dotenv";
 dotenv.config();
 import Stripe from "stripe";
 
+const clientUrl =
+  process.env.NODE_ENV === "development"
+    ? process.env.CLIENT_URL_DEV
+    : process.env.CLIENT_URL;
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-06-30.basil",
 });
@@ -32,8 +37,8 @@ export const stripeCheckout: RequestHandler = async (req, res) => {
         },
       ],
       mode: "payment",
-      success_url: `${process.env.CLIENT_URL}/thanks?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/`,
+      success_url: `${clientUrl}/thanks?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${clientUrl}/`,
     });
 
     res.status(200).json({ url: session.url });
