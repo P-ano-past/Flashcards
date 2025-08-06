@@ -1,4 +1,3 @@
-// This file is part of the Flashcard project intended for the Stripe payment integration.
 import { RequestHandler } from "express";
 import dotenv from "dotenv";
 dotenv.config();
