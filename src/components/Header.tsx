@@ -10,15 +10,23 @@ import {
 } from "@mui/material";
 import UserRoutes from "../Utils/UserRoutes";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import MenuIcon from "@mui/icons-material/Menu";
+
 import { useAlert } from "../Context/AlertContext";
 import { useUser } from "../Context/UserContext";
+import DrawerComponent from "./Drawer/Drawer";
 
 export default function Header() {
   const setToast = useAlert();
   const { user, loading } = useUser();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [open, setOpen] = React.useState(false);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const toggleDrawer = () => {
+    setOpen(!open);
   };
 
   const handleLogin = async () => {
@@ -80,9 +88,54 @@ export default function Header() {
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Flashcards
-        </Typography>
+        <Box
+          onClick={toggleDrawer}
+          sx={{
+            position: "relative",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "40px",
+            width: "150px",
+            cursor: "pointer",
+            overflow: "hidden",
+            "&:hover .flashcard-text": {
+              opacity: 0,
+            },
+            "&:hover .menu-icon": {
+              opacity: 1,
+            },
+          }}
+        >
+          {/* Flashcards text */}
+          <Typography
+            variant="h6"
+            component="span"
+            className="flashcard-text"
+            sx={{
+              position: "absolute",
+              opacity: 1,
+              transition: "opacity 0.3s",
+            }}
+          >
+            Flashcards
+          </Typography>
+
+          {/* Menu icon (hamburger) */}
+          <MenuIcon
+            className="menu-icon"
+            sx={{
+              position: "absolute",
+              opacity: 0,
+              transition: "opacity 0.3s",
+            }}
+          />
+        </Box>
+        <DrawerComponent
+          open={open}
+          setOpen={setOpen}
+          toggleDrawer={toggleDrawer}
+        />
         <Box>
           <IconButton
             size="large"
