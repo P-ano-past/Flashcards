@@ -131,11 +131,7 @@ export default function Header() {
             }}
           />
         </Box>
-        <DrawerComponent
-          open={open}
-          setOpen={setOpen}
-          toggleDrawer={toggleDrawer}
-        />
+        <DrawerComponent open={open} toggleDrawer={toggleDrawer} />
         <Box>
           <IconButton
             size="large"

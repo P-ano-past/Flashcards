@@ -3,13 +3,11 @@ import { Drawer } from "@mui/material";
 
 type DrawerComponentProps = {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   toggleDrawer: () => void;
 };
 
 export default function DrawerComponent({
   open,
-  setOpen,
   toggleDrawer,
 }: DrawerComponentProps) {
   return (
