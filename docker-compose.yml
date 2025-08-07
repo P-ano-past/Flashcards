@@ -6,6 +6,8 @@ services:
       dockerfile: backend/Dockerfile
     env_file:
       - ./backend/.env
+    environment:
+      NODE_ENV: production
     ports:
       - "3001:3000"
 

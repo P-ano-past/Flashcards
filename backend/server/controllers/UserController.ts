@@ -30,6 +30,11 @@ const clientUrl =
     : process.env.CLIENT_URL;
 
 export const loginUserAccount: RequestHandler = async (req, res) => {
+  console.log(`env vars`, {
+    client_url: process.env.CLIENT_URL,
+    client_url_dev: process.env.CLIENT_URL_DEV,
+    nodeEnv: process.env.NODE_ENV,
+  });
   try {
     if (!auth0Domain || !clientId || !callbackUrl) {
       res.status(500).json({ error: "Missing required environment variables" });
