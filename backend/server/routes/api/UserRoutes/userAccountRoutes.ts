@@ -6,6 +6,7 @@ import {
   getUserProfile,
   getUsers,
   getRole,
+  saveRole,
 } from "../../../controllers/UserController";
 const router = Router();
 
@@ -14,6 +15,6 @@ router.get("/callback", handleCallback);
 router.get("/logout", logoutUserAccount);
 router.get("/profile", getUserProfile);
 router.get("/allUsers", getUsers);
-router.get("/role", getRole);
+router.route("/role").get(getRole).post(saveRole);
 
 export default router;

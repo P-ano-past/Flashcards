@@ -6,10 +6,6 @@ import { useUser } from "../../Context/UserContext";
 export default function LoginButton() {
   const { isAuthenticated, loading } = useUser();
   const setToast = useAlert();
-  console.log(`useUser`, {
-    isAuthenticated: isAuthenticated,
-    loading: loading,
-  });
   const handleLogin = async () => {
     try {
       const response = await UserRoutes.login();

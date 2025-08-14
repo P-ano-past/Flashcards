@@ -19,8 +19,27 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const fetchUser = async () => {
       try {
         const res = await UserRoutes.getProfile();
-        const roleRes = await UserRoutes.getRole();
-        const rolesArray = roleRes?.roles || [];
+
+        let rolesArray: ("guest" | "premium" | "admin" | "user")[] = [];
+        try {
+          const roleRes = await UserRoutes.getRole();
+          rolesArray = roleRes?.roles?.length ? roleRes.roles : ["guest"];
+        } catch (roleError) {
+          console.warn(
+            "Failed to fetch roles, defaulting to guest.",
+            roleError
+          );
+          rolesArray = ["guest"];
+        }
+
+        if (!res.roles || !res.roles.length) {
+          try {
+            await UserRoutes.saveRole(rolesArray);
+          } catch (saveError) {
+            console.error("Failed to save roles to DB:", saveError);
+          }
+        }
+
         const userWithRoles: UserProfile = { ...res, roles: rolesArray };
 
         if (

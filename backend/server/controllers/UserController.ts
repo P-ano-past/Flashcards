@@ -2,8 +2,12 @@ import { RequestHandler } from "express";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.development" });
 import axios from "axios";
-import { pool } from "../postgres/db";
-import { getAllUsers } from "../models/userModel";
+import {
+  getAllUsers,
+  getProfile,
+  saveUserData,
+  saveUserRole,
+} from "../models/userModel";
 
 const auth0Domain =
   process.env.NODE_ENV === "development"
@@ -83,19 +87,12 @@ export const handleCallback: RequestHandler = async (req, res) => {
     );
     const { sub, email, name, picture } = userInfoResponse.data;
 
-    const query = `
-  INSERT INTO users (auth0_id, email, name, picture, first_login, last_login, updated_at)
-  VALUES ($1, $2, $3, $4, NOW(), NOW(), NOW())
-  ON CONFLICT (auth0_id)
-  DO UPDATE SET
-  email = COALESCE(EXCLUDED.email, users.email),
-  name = COALESCE(NULLIF(EXCLUDED.name, ''), users.name),
-  picture = COALESCE(NULLIF(EXCLUDED.picture, ''), users.picture),
-    last_login = NOW(),
-    updated_at = NOW();
-`;
-
-    await pool.query(query, [sub, email, name, picture]);
+    try {
+      await saveUserData(sub, email, name, picture);
+    } catch (err) {
+      console.error("Database save failed:", err);
+      throw new Error("Failed to save user profile to the database.");
+    }
 
     const userData = { sub };
 
@@ -169,17 +166,14 @@ export const getUserProfile: RequestHandler = async (req, res) => {
   }
 
   try {
-    const result = await pool.query(
-      "SELECT id, auth0_id, email, name, picture, first_login FROM users WHERE auth0_id = $1",
-      [auth0_id]
-    );
+    const result = await getProfile(auth0_id);
 
-    if (result.rows.length === 0) {
+    if (result.length === 0) {
       res.status(404).json({ error: "User not found" });
       return;
     }
 
-    res.status(200).json(result.rows[0]);
+    res.status(200).json(result[0]);
     return;
   } catch (error) {
     console.error("Error fetching user from DB:", error);
@@ -238,5 +232,40 @@ export const getRole: RequestHandler = async (req, res) => {
   } catch (error) {
     console.error("Error fetching role from Auth0:", error);
     res.status(500).json({ error: "Failed to fetch user role." });
+  }
+};
+
+export const saveRole: RequestHandler = async (req, res) => {
+  const userCookie = req.cookies.user;
+  const { roles } = req.body;
+  console.log(`roles`, roles);
+  if (!userCookie) {
+    res.status(401).json({ error: "No user cookie found" });
+    return;
+  }
+
+  if (!roles) {
+    res.status(401).json({ error: "No roles found in request" });
+    return;
+  }
+
+  let parsedUser;
+  try {
+    parsedUser = JSON.parse(userCookie);
+  } catch {
+    res.status(400).json({ error: "Invalid user cookie" });
+    return;
+  }
+
+  const auth0_id = parsedUser?.sub;
+  if (!auth0_id) {
+    res.status(400).json({ error: "Missing auth0_id" });
+    return;
+  }
+  try {
+    await saveUserRole(auth0_id, roles);
+  } catch (error) {
+    console.error("Error saving role to DB:", error);
+    res.status(500).json({ error: "Failed to save user role. " });
   }
 };
