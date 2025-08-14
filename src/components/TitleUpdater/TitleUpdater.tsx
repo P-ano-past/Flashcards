@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useHead } from "../../Context/HeadContext";
 
-const appTitle = "PrepWise";
+const appTitle = "PrepWyze";
 
 const titleMap: Record<string, string> = {
   "/": `Home | ${appTitle}`,

@@ -3,12 +3,13 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY backend/package.json backend/package-lock.json ./backend/
-RUN npm install --prefix backend
+COPY package.json package-lock.json ./
+RUN npm install 
 
-COPY backend ./backend
+COPY . .
 
 WORKDIR /app/backend
+RUN npm install
 RUN npm run build
 
 EXPOSE 3001

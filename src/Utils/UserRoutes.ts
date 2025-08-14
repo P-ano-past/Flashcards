@@ -4,7 +4,7 @@ import type { UserProfile } from "./types/api";
 const UserRoutes = {
   login: async () => {
     try {
-      const response = await axios.post(`api/user/account/login`);
+      const response = await axios.post(`/api/user/account/login`);
       if (response.data.redirectUrl) {
         window.location.href = response.data.redirectUrl;
       }
@@ -22,7 +22,7 @@ const UserRoutes = {
   },
   logout: async () => {
     try {
-      const response = await axios.get(`api/user/account/logout`);
+      const response = await axios.get(`/api/user/account/logout`);
       console.log(`response`, response);
       return response.data;
     } catch (error) {
@@ -37,7 +37,7 @@ const UserRoutes = {
   },
   getProfile: async (): Promise<UserProfile> => {
     try {
-      const response = await axios.get(`api/user/account/profile`, {
+      const response = await axios.get(`/api/user/account/profile`, {
         withCredentials: true,
       });
       return response.data;

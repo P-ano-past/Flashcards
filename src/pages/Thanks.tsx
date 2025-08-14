@@ -32,7 +32,7 @@ const DonateSuccess = () => {
 
   return (
     <div className="max-w-xl mx-auto text-center p-6 rounded-lg bg-white shadow-lg mt-12">
-      d<h1>Thank You!</h1>
+      <h1>Thank You!</h1>
       <h1 className="text-3xl font-bold mb-4 text-green-600">
         Woo!🎉 Thank you {donationDetails?.name}!
       </h1>

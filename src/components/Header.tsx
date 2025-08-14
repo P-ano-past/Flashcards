@@ -8,17 +8,13 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-import UserRoutes from "../Utils/UserRoutes";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { useAlert } from "../Context/AlertContext";
-import { useUser } from "../Context/UserContext";
 import DrawerComponent from "./Drawer/Drawer";
+import LoginButton from "./LoginButton/LoginButton";
 
 export default function Header() {
-  const setToast = useAlert();
-  const { user, loading } = useUser();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [open, setOpen] = React.useState(false);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -27,58 +23,6 @@ export default function Header() {
 
   const toggleDrawer = () => {
     setOpen(!open);
-  };
-
-  const handleLogin = async () => {
-    try {
-      const response = await UserRoutes.login();
-
-      const loginUrl = response;
-
-      if (loginUrl) {
-        window.location.href = loginUrl;
-      } else {
-        throw new Error("No login URL received from the server.");
-      }
-
-      setToast({
-        success: true,
-        message: "Login successful!",
-        show: true,
-      });
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occurred.";
-      setToast({
-        success: false,
-        message: errorMessage,
-        show: true,
-      });
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await UserRoutes.logout();
-      setToast({
-        success: true,
-        message: "Logout successful!",
-        show: true,
-      });
-      window.location.reload();
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occurred.";
-      setToast({
-        success: false,
-        message: errorMessage,
-        show: true,
-      });
-    }
   };
 
   const handleClose = () => {
@@ -160,13 +104,7 @@ export default function Header() {
             onClose={handleClose}
           >
             <MenuItem onClick={handleClose}>Profile (Coming soon!)</MenuItem>
-            {loading ? (
-              <MenuItem disabled>Loading...</MenuItem>
-            ) : user ? (
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            ) : (
-              <MenuItem onClick={handleLogin}>Login</MenuItem>
-            )}
+            <LoginButton />
           </Menu>
         </Box>
       </Toolbar>

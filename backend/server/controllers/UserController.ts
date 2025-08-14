@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 dotenv.config({ path: ".env.development" });
 import axios from "axios";
 import { pool } from "../postgres/db";
+import { getAllUsers } from "../models/userModel";
 
 const auth0Domain =
   process.env.NODE_ENV === "development"
@@ -24,17 +25,22 @@ const clientSecret =
     ? process.env.AUTH0_CLIENT_SECRET_DEV
     : process.env.AUTH0_CLIENT_SECRET;
 
-const clientUrl =
+const baseUrl =
   process.env.NODE_ENV === "development"
-    ? process.env.CLIENT_URL_DEV
-    : process.env.CLIENT_URL;
+    ? process.env.BASE_URL_DEV
+    : process.env.BASE_URL;
+
+export const getUsers: RequestHandler = async (req, res) => {
+  try {
+    const users = await getAllUsers();
+    res.json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 export const loginUserAccount: RequestHandler = async (req, res) => {
-  console.log(`env vars`, {
-    client_url: process.env.CLIENT_URL,
-    client_url_dev: process.env.CLIENT_URL_DEV,
-    nodeEnv: process.env.NODE_ENV,
-  });
   try {
     if (!auth0Domain || !clientId || !callbackUrl) {
       res.status(500).json({ error: "Missing required environment variables" });
@@ -60,6 +66,7 @@ export const handleCallback: RequestHandler = async (req, res) => {
         client_secret: clientSecret,
         code: code,
         redirect_uri: callbackUrl,
+        domain: baseUrl,
         grant_type: "authorization_code",
       }
     );
@@ -74,7 +81,6 @@ export const handleCallback: RequestHandler = async (req, res) => {
         },
       }
     );
-
     const { sub, email, name, picture } = userInfoResponse.data;
 
     const query = `
@@ -91,15 +97,18 @@ export const handleCallback: RequestHandler = async (req, res) => {
 
     await pool.query(query, [sub, email, name, picture]);
 
-    const userData = { sub, email, name, picture };
+    const userData = { sub };
+
     res.cookie("user", JSON.stringify(userData), {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 60 * 60 * 24 * 7 * 1000, // 1 week
+      secure: true,
+      sameSite: "none",
+      path: "/",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
-    res.redirect(`${clientUrl}`);
+    res.redirect(`${baseUrl}`);
+
     return;
   } catch (error) {
     console.error("Error exchanging code for token or writing to DB:", error);
@@ -159,7 +168,7 @@ export const getUserProfile: RequestHandler = async (req, res) => {
     res.status(400).json({ error: "Missing auth0_id in cookie" });
     return;
   }
-
+  console.log(`auth0_id`, auth0_id);
   try {
     const result = await pool.query(
       "SELECT id, auth0_id, email, name, picture, first_login FROM users WHERE auth0_id = $1",

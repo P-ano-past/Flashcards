@@ -19,6 +19,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const fetchUser = async () => {
       try {
         const res = await UserRoutes.getProfile();
+        console.log(`res`, res);
         setUser(res);
       } catch (err) {
         console.error("Error fetching user:", err);

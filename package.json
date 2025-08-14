@@ -8,7 +8,16 @@
     "build": "npm install --prefix backend && npm run build --prefix backend && tsc -b && vite build",
     "start": "node backend/dist/index.js",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker:build:backend": "docker build -t flashcard-backend:latest -f backend/Dockerfile .",
+    "docker:tag:backend": "docker tag flashcard-backend:latest 135709400167.dkr.ecr.us-east-2.amazonaws.com/flashcard-backend:latest",
+    "docker:push:backend": "docker push 135709400167.dkr.ecr.us-east-2.amazonaws.com/flashcard-backend:latest",
+    "docker:deploy:backend": "npm run docker:build:backend && npm run docker:tag:backend && npm run docker:push:backend",
+    "docker:login": "aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 135709400167.dkr.ecr.us-east-2.amazonaws.com",
+    "docker:build:frontend": "docker build -t flashcard-frontend .",
+    "docker:tag:frontend": "docker tag flashcard-frontend:latest 135709400167.dkr.ecr.us-east-2.amazonaws.com/flashcard-frontend:latest",
+    "docker:push:frontend": "docker push 135709400167.dkr.ecr.us-east-2.amazonaws.com/flashcard-frontend:latest",
+    "docker:deploy:frontend": "npm run docker:build:frontend && npm run docker:tag:frontend && npm run docker:push:frontend"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.4.0",

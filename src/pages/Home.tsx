@@ -16,7 +16,7 @@ export default function Home() {
   const [queryTopic, setQueryTopic] = useState("");
 
   useEffect(() => {
-    setTitle("Home - PrepWise");
+    setTitle("Home - PrepWyze");
     setMeta("description", "Learn more about the PrepWise mission and team.");
   }, []);
 

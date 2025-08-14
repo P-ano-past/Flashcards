@@ -8,9 +8,10 @@ import passport from "passport";
 import routes from "./routes";
 import path from "path";
 import { pool } from "./postgres/db";
+import cors from "cors";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
 import cookieParser from "cookie-parser";
 
 app.use(express.json());
@@ -19,19 +20,30 @@ if (!process.env.SESSION_SECRET) {
   throw new Error("SESSION_SECRET is not defined in environment variables.");
 }
 
+const isProduction = process.env.NODE_ENV === "production";
+
 app.use(
   session({
     store: new (pgSession(session))({
       pool: pool,
       tableName: "user_sessions",
     }),
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true, // true if you're using HTTPS
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
     },
+  })
+);
+
+app.use(
+  cors({
+    origin: isProduction ? process.env.BASE_URL : "http://localhost:3000",
+    credentials: true,
   })
 );
 
@@ -49,6 +61,10 @@ app.get("/*splat", (req, res) => {
   res.sendFile(path.join(frontendDistPath, "index.html"));
 });
 
+app.get("/", (req, res) => {
+  res.status(200).send("OK");
+});
+
 pool
   .connect()
   .then(() => console.log("🟢 Connected Postgres DB to AWS - RDS"))
@@ -57,6 +73,6 @@ pool
     process.exit(1);
   });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });

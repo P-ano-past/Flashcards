@@ -7,6 +7,7 @@ import type {
 
 const PaymentRoutes = {
   stripeCheckout: async (data: PaymentData): Promise<PaymentResponse> => {
+    console.log(`data`, data);
     try {
       const response = await axios.post("/api/checkout/method/stripe", data);
       console.log(`response`, response);
