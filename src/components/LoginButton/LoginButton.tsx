@@ -4,9 +4,12 @@ import UserRoutes from "../../Utils/UserRoutes";
 import { useUser } from "../../Context/UserContext";
 
 export default function LoginButton() {
-  const { user, loading } = useUser();
+  const { isAuthenticated, loading } = useUser();
   const setToast = useAlert();
-
+  console.log(`useUser`, {
+    isAuthenticated: isAuthenticated,
+    loading: loading,
+  });
   const handleLogin = async () => {
     try {
       const response = await UserRoutes.login();
@@ -61,10 +64,9 @@ export default function LoginButton() {
 
   return (
     <>
-      {" "}
       {loading ? (
         <MenuItem disabled>Loading...</MenuItem>
-      ) : user ? (
+      ) : isAuthenticated ? (
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       ) : (
         <MenuItem onClick={handleLogin}>Login</MenuItem>

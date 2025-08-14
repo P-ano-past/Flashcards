@@ -60,12 +60,13 @@ export interface PaymentSession {
 }
 
 export interface UserProfile {
-  sub: string;
+  sub?: string;
   name?: string;
   email?: string;
   picture?: string;
   createdAt?: string;
   updatedAt?: string;
+  roles: ("guest" | "premium" | "admin" | "user")[];
 }
 
 export interface AuthContextType {

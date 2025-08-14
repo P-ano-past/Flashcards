@@ -129,7 +129,6 @@ export const handleCallback: RequestHandler = async (req, res) => {
 
 export const logoutUserAccount: RequestHandler = async (req, res) => {
   try {
-    // Clear your app cookies
     res.clearCookie("user", {
       path: "/",
       httpOnly: true,
@@ -168,7 +167,7 @@ export const getUserProfile: RequestHandler = async (req, res) => {
     res.status(400).json({ error: "Missing auth0_id in cookie" });
     return;
   }
-  console.log(`auth0_id`, auth0_id);
+
   try {
     const result = await pool.query(
       "SELECT id, auth0_id, email, name, picture, first_login FROM users WHERE auth0_id = $1",
@@ -186,5 +185,58 @@ export const getUserProfile: RequestHandler = async (req, res) => {
     console.error("Error fetching user from DB:", error);
     res.status(500).json({ error: "Failed to fetch user profile." });
     return;
+  }
+};
+
+export const getMgmtToken = async (): Promise<string> => {
+  const tokenRes = await axios.post(`https://${auth0Domain}/oauth/token`, {
+    client_id: clientId,
+    client_secret: clientSecret,
+    audience: `https://${auth0Domain}/api/v2/`,
+    grant_type: "client_credentials",
+  });
+
+  return tokenRes.data.access_token;
+};
+
+export const getRole: RequestHandler = async (req, res) => {
+  const userCookie = req.cookies.user;
+  if (!userCookie) {
+    res.status(401).json({ error: "No user cookie found" });
+    return;
+  }
+
+  let parsedUser;
+  try {
+    parsedUser = JSON.parse(userCookie);
+  } catch {
+    res.status(400).json({ error: "Invalid user cookie" });
+    return;
+  }
+
+  const auth0_id = parsedUser?.sub;
+  if (!auth0_id) {
+    res.status(400).json({ error: "Missing auth0_id" });
+    return;
+  }
+
+  try {
+    const mgmtToken = await getMgmtToken();
+
+    const rolesRes = await axios.get(
+      `https://${auth0Domain}/api/v2/users/${encodeURIComponent(
+        auth0_id
+      )}/roles`,
+      {
+        headers: {
+          Authorization: `Bearer ${mgmtToken}`,
+        },
+      }
+    );
+
+    res.status(200).json({ roles: rolesRes.data });
+  } catch (error) {
+    console.error("Error fetching role from Auth0:", error);
+    res.status(500).json({ error: "Failed to fetch user role." });
   }
 };

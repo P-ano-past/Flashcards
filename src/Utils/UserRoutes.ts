@@ -52,6 +52,23 @@ const UserRoutes = {
       }
     }
   },
+  getRole: async (): Promise<UserProfile> => {
+    try {
+      const response = await axios.get("/api/user/account/role", {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.error ||
+            "An error occurred while fetching the profile."
+        );
+      } else {
+        throw new Error("An unexpected error occurred.");
+      }
+    }
+  },
 };
 
 export default UserRoutes;

@@ -3,10 +3,10 @@ import type { ReactNode } from "react";
 import UserRoutes from "../Utils/UserRoutes";
 import type { UserProfile } from "../Utils/types/api";
 
-// Define the shape of the user data
 interface UserContextType {
   user: UserProfile | null;
   loading: boolean;
+  isAuthenticated: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -19,8 +19,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const fetchUser = async () => {
       try {
         const res = await UserRoutes.getProfile();
-        console.log(`res`, res);
-        setUser(res);
+        const roleRes = await UserRoutes.getRole();
+        const rolesArray = roleRes?.roles || [];
+        const userWithRoles: UserProfile = { ...res, roles: rolesArray };
+
+        if (
+          userWithRoles.roles.length &&
+          !userWithRoles.roles.includes("guest")
+        ) {
+          setUser(userWithRoles);
+        } else {
+          setUser(null);
+        }
       } catch (err) {
         console.error("Error fetching user:", err);
         setUser(null);
@@ -32,8 +42,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     fetchUser();
   }, []);
 
+  const isAuthenticated = !!user;
+
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user, loading, isAuthenticated }}>
       {children}
     </UserContext.Provider>
   );
