@@ -39,3 +39,5 @@ const RoleRoutes = {
     }
   },
 };
+
+export default RoleRoutes;
