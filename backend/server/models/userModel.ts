@@ -46,17 +46,3 @@ export const getProfile = async (auth0_id: string): Promise<User[]> => {
   );
   return result.rows;
 };
-
-export const saveUserRole = async (
-  auth0_id: string,
-  roles: string[]
-): Promise<User[]> => {
-  const result = await pool.query(
-    `UPDATE users
-     SET roles = $1
-     WHERE auth0_id = $2
-     RETURNING *;`,
-    [roles, auth0_id]
-  );
-  return result.rows;
-};

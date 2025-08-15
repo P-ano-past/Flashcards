@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import UserRoutes from "../Utils/UserRoutes";
+import RoleRoutes from "../Utils/RoleRoutes";
 import type { UserProfile } from "../Utils/types/api";
 
 interface UserContextType {
@@ -19,10 +20,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const fetchUser = async () => {
       try {
         const res = await UserRoutes.getProfile();
-
+        console.log(`res`, res);
         let rolesArray: ("guest" | "premium" | "admin" | "user")[] = [];
         try {
-          const roleRes = await UserRoutes.getRole();
+          const roleRes = await RoleRoutes.getRole();
           rolesArray = roleRes?.roles?.length ? roleRes.roles : ["guest"];
         } catch (roleError) {
           console.warn(
@@ -31,10 +32,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           );
           rolesArray = ["guest"];
         }
-
         if (!res.roles || !res.roles.length) {
           try {
-            await UserRoutes.saveRole(rolesArray);
+            await RoleRoutes.saveRole(rolesArray);
           } catch (saveError) {
             console.error("Failed to save roles to DB:", saveError);
           }
