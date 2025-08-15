@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import UserRoutes from "../Utils/UserRoutes";
 import RoleRoutes from "../Utils/RoleRoutes";
-import type { UserProfile } from "../Utils/types/api";
+import type { UserProfile, Role } from "../Utils/types/api";
 
 interface UserContextType {
   user: UserProfile | null;
@@ -21,17 +21,33 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       try {
         const res = await UserRoutes.getProfile();
         console.log(`res`, res);
-        let rolesArray: ("guest" | "premium" | "admin" | "user")[] = [];
+        let rolesArray: Role[] = [];
         try {
           const roleRes = await RoleRoutes.getRole();
-          rolesArray = roleRes?.roles?.length ? roleRes.roles : ["guest"];
+
+          rolesArray = roleRes?.roles?.length
+            ? roleRes.roles
+            : [
+                {
+                  id: "guest",
+                  name: "guest",
+                  description: "Default guest role",
+                },
+              ];
         } catch (roleError) {
           console.warn(
             "Failed to fetch roles, defaulting to guest.",
             roleError
           );
-          rolesArray = ["guest"];
+          rolesArray = [
+            {
+              id: "guest",
+              name: "guest",
+              description: "Default guest role",
+            },
+          ];
         }
+
         if (!res.roles || !res.roles.length) {
           try {
             await RoleRoutes.saveRole(rolesArray);
@@ -44,7 +60,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
         if (
           userWithRoles.roles.length &&
-          !userWithRoles.roles.includes("guest")
+          !userWithRoles.roles.some((role) => role.name === "guest")
         ) {
           setUser(userWithRoles);
         } else {

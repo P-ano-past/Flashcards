@@ -59,6 +59,11 @@ export interface PaymentSession {
   name: string;
 }
 
+export interface Role {
+  id: string;
+  name: "guest" | "premium" | "admin" | "user";
+  description: string;
+}
 export interface UserProfile {
   sub?: string;
   name?: string;
@@ -66,7 +71,7 @@ export interface UserProfile {
   picture?: string;
   createdAt?: string;
   updatedAt?: string;
-  roles: ("guest" | "premium" | "admin" | "user")[];
+  roles: Role[];
 }
 
 export interface AuthContextType {
