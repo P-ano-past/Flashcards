@@ -1,14 +1,14 @@
 CREATE TABLE queryResults (
 id SERIAL PRIMARY KEY,  
- users_auth0_id_key TEXT NOT NULL,  
+ users_id UUID NOT NULL,  
  query TEXT NOT NULL,  
  results TEXT[],  
  update_count INT DEFAULT 0,  
  saved_cards TEXT[],  
  created_at TIMESTAMPTZ DEFAULT NOW(),  
  updated_at TIMESTAMPTZ DEFAULT NOW(),  
- CONSTRAINT fk_users FOREIGN KEY (users_auth0_id_key)
-REFERENCES users(users_auth0_id_key) ON DELETE CASCADE
+ CONSTRAINT fk_users FOREIGN KEY (users_id)  
+ REFERENCES users(id) ON DELETE CASCADE  
 );
 
 CREATE OR REPLACE FUNCTION increment_update_count()
