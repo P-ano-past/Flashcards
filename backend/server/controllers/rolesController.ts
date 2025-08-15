@@ -107,9 +107,28 @@ export const saveRole: RequestHandler = async (req, res) => {
 };
 
 export const removeAllRoles: RequestHandler = async (req, res) => {
-  const auth0_id = req.body.auth0_id;
+  const userCookie = req.cookies.user;
+  if (!userCookie) {
+    res.status(401).json({ error: "No user cookie found" });
+    return;
+  }
+
+  let parsedUser;
   try {
-    await purgeUserRoles(auth0_id);
+    parsedUser = JSON.parse(userCookie);
+  } catch {
+    res.status(400).json({ error: "Invalid user cookie" });
+    return;
+  }
+
+  const auth0_id = parsedUser?.sub;
+  if (!auth0_id) {
+    res.status(400).json({ error: "Missing auth0_id" });
+    return;
+  }
+  try {
+    const purgeRoles = await purgeUserRoles(auth0_id);
+    console.log("purgeRoles", purgeRoles);
   } catch (error) {
     console.error("Error removing all roles from user:", error);
     res

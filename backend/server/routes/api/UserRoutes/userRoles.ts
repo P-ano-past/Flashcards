@@ -3,10 +3,10 @@ import {
   getRole,
   saveRole,
   removeAllRoles,
-} from "../../../controllers/rolesController";
+} from "../../../controllers/RolesController";
 
 const router = Router();
 
-router.route("/role").get(getRole).post(saveRole).put(removeAllRoles);
+router.route("/roleAction").get(getRole).post(saveRole).put(removeAllRoles);
 
 export default router;

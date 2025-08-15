@@ -10,7 +10,7 @@ export const saveUserRole = async (
        SET roles = $1
        WHERE auth0_id = $2
        RETURNING *;`,
-    [JSON.stringify(roles), auth0_id]
+    [roles, auth0_id]
   );
   return result.rows;
 };

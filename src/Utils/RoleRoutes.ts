@@ -4,7 +4,7 @@ import type { UserProfile } from "./types/api";
 const RoleRoutes = {
   getRole: async (): Promise<UserProfile> => {
     try {
-      const response = await axios.get("/api/user/account/role", {
+      const response = await axios.get("/api/user/roles/roleAction", {
         withCredentials: true,
       });
       return response.data;
@@ -22,7 +22,7 @@ const RoleRoutes = {
   saveRole: async (roles: string[]): Promise<UserProfile> => {
     try {
       const response = await axios.post(
-        "/api/user/account/role",
+        "/api/user/roles/roleAction",
         { roles },
         { withCredentials: true }
       );
@@ -35,6 +35,21 @@ const RoleRoutes = {
         );
       } else {
         throw new Error("An unexpected error occurred.");
+      }
+    }
+  },
+  removeAllRoles: async () => {
+    try {
+      const response = await axios.put("/api/user/roles/roleAction", {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(
+          error.response?.data?.error ||
+            "An error occured while removing all roles from user"
+        );
       }
     }
   },
