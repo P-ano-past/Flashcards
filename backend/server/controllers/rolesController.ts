@@ -75,11 +75,12 @@ export const getRole: RequestHandler = async (req, res) => {
 export const saveRole: RequestHandler = async (req, res) => {
   const userCookie = req.cookies.user;
   const { roles } = req.body;
+
   if (!userCookie) {
     res.status(401).json({ error: "No user cookie found" });
     return;
   }
-
+  console.log(`roles`, roles);
   if (!roles) {
     res.status(401).json({ error: "No roles found in request" });
     return;

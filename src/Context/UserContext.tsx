@@ -49,6 +49,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
 
         if (!res.roles || !res.roles.length) {
+          console.log("context, rolesArray:", rolesArray);
           try {
             await RoleRoutes.saveRole(rolesArray);
           } catch (saveError) {

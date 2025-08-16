@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { UserProfile } from "./types/api";
+import type { UserProfile, Role } from "./types/api";
 
 const RoleRoutes = {
   getRole: async (): Promise<UserProfile> => {
@@ -19,11 +19,12 @@ const RoleRoutes = {
       }
     }
   },
-  saveRole: async (roles: string[]): Promise<UserProfile> => {
+  saveRole: async (roles: Role[]): Promise<UserProfile> => {
+    console.log(`roles saveRole`, roles);
     try {
       const response = await axios.post(
         "/api/user/roles/roleAction",
-        { roles },
+        { roles: roles },
         { withCredentials: true }
       );
       return response.data;
@@ -38,7 +39,7 @@ const RoleRoutes = {
       }
     }
   },
-  removeAllRoles: async () => {
+  removeAllRoles: async (): Promise<void> => {
     try {
       const response = await axios.put("/api/user/roles/roleAction", {
         withCredentials: true,
