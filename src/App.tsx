@@ -11,6 +11,10 @@ import Header from "./components/Header";
 
 function App() {
   // Any changes made to the routes should also be reflected in the TitleUpdater component
+  //TODO: Configure authenticated sections vs unauthenticated using RBAC
+  //TODO: Build out user profile
+  //TODO: Build out settings page as admin role
+  //TODO: Set branding to associate with brand name
 
   return (
     <>
@@ -21,9 +25,9 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/home" element={<Home />} />
           <Route path="/about" element={<About />} />
-
           <Route path="/thanks" element={<Thanks />} />
           <Route path="/settings" element={<Settings />} />
+          {/* <Route path="/profile" element={<Profile/>}/> */}
         </Routes>
 
         <DonoBox />
