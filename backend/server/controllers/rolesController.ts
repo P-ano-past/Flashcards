@@ -80,7 +80,6 @@ export const saveRole: RequestHandler = async (req, res) => {
     res.status(401).json({ error: "No user cookie found" });
     return;
   }
-  console.log(`roles`, roles);
   if (!roles) {
     res.status(401).json({ error: "No roles found in request" });
     return;
@@ -129,7 +128,7 @@ export const removeAllRoles: RequestHandler = async (req, res) => {
   }
   try {
     const purgeRoles = await purgeUserRoles(auth0_id);
-    console.log("purgeRoles", purgeRoles);
+    res.status(200).json({ purgeRoles });
   } catch (error) {
     console.error("Error removing all roles from user:", error);
     res

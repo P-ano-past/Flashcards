@@ -20,7 +20,6 @@ const RoleRoutes = {
     }
   },
   saveRole: async (roles: Role[]): Promise<UserProfile> => {
-    console.log(`roles saveRole`, roles);
     try {
       const response = await axios.post(
         "/api/user/roles/roleAction",

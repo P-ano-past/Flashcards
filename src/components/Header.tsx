@@ -62,7 +62,7 @@ export default function Header() {
               transition: "opacity 0.3s",
             }}
           >
-            Flashcards
+            Prepwyze
           </Typography>
 
           {/* Menu icon (hamburger) */}

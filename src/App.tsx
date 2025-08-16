@@ -15,6 +15,7 @@ function App() {
   //TODO: Build out user profile
   //TODO: Build out settings page as admin role
   //TODO: Set branding to associate with brand name
+  //TODO: Create table for storing queries.
 
   return (
     <>
