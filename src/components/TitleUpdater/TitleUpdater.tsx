@@ -7,6 +7,8 @@ const appTitle = "PrepWyze";
 const titleMap: Record<string, string> = {
   "/": `Home | ${appTitle}`,
   "/thanks": `Thanks! | ${appTitle}`,
+  "/about": `About | ${appTitle}`,
+  "/settings": `Settings | ${appTitle}`,
 };
 
 export default function TitleUpdater() {
