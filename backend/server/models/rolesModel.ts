@@ -5,7 +5,6 @@ export const saveUserRole = async (
   auth0_id: string,
   roles: object
 ): Promise<User[]> => {
-  console.log("roleModel", roles);
   const result = await pool.query(
     `UPDATE users
        SET roles = $1

@@ -68,7 +68,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
           setUser(null);
         }
       } catch (err) {
-        console.error("Error fetching user:", err);
+        if (err) return;
         setUser(null);
       } finally {
         setLoading(false);
