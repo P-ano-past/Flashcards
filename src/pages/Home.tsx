@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Header from "../components/Header";
 import QueryForm from "../components/QueryForm";
 import FlashcardContainer from "../components/FlashcardComponents/FlashcardContainer";
 import { initialFormValues } from "../Utils/types/api";
@@ -22,7 +21,6 @@ export default function Home() {
 
   return (
     <div>
-      <Header />
       <main className="p-6 max-w-3xl mx-auto space-y-6">
         <AnimatePresence mode="wait">
           {!submitted ? (

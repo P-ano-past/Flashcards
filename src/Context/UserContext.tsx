@@ -20,7 +20,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const fetchUser = async () => {
       try {
         const res = await UserRoutes.getProfile();
-        console.log(`res`, res);
         let rolesArray: Role[] = [];
         try {
           const roleRes = await RoleRoutes.getRole();
